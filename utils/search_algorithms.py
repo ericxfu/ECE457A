@@ -171,6 +171,23 @@ def simulated_annealing(cost_function: Callable, max_itr: int, temperature: floa
     return best_x, best_cost, x_history, cost_history
 
 ##############################################################################################################
+############ Variable Neighbour Search (VNS) #################################################################
+##############################################################################################################
+
+def vns(cost_function: Callable, max_itr: int, convergence_threshold: float, 
+                 x_initial: Optional[np.array] = None, x_range: Optional[List[List[float]]] = None, hide_progress_bar: Optional[bool] = False) -> Tuple[np.array, float, List[np.array], List[float]]:
+
+    neighbourhoodPts = []
+
+    # select neighbourhood points
+    #for i in range(5):
+    x_initial = [random.uniform(x_range[i][0], x_range[i][1]) for i in range(len(x_range))]
+
+    print(x_initial)
+
+    return best_x, best_cost, x_history, cost_history
+
+##############################################################################################################
 ############ Particle Swarm Optimization (PSO) ###############################################################
 ##############################################################################################################
 def pso(cost_function: Callable, num_particles: int, max_itr: int, alpha_1: float, alpha_2: float, alpha_3: float,

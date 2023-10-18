@@ -1,5 +1,5 @@
-search_algorithm: ga  # Options: local_search, iterative_local_search, simulated_annealing, pso, ga
-cost_function: revenue  # Options: sphere, schwefel, schaffer, griewank, func7, func8, func9, func11, revenue
+search_algorithm: vns  # Options: local_search, iterative_local_search, vns, simulated_annealing, pso, ga
+cost_function: schwefel  # Options: sphere, schwefel, schaffer, griewank, func7, func8, func9, func11, revenue
 dimension: 2
 x_initial: null  # A d-dimensional list, such as [1.0, -1.0], or null. If null, the x_initial will be a random point in the domain.
 
@@ -11,6 +11,9 @@ iterative_local_search:
   max_itr_ils: 20  # Max iterations for iterative local search (outer loop)
   max_itr_ls: 200  # Max iterations for local search (inner loop)
   convergence_threshold: 0.001
+
+vns:
+  max_itr: 1000
 
 simulated_annealing:
   max_itr: 50
