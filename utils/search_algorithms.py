@@ -104,6 +104,60 @@ def iterative_local_search(cost_function: Callable, max_itr_ils: int, max_itr_ls
     return best_x, best_cost, x_history, cost_history
 
 ##############################################################################################################
+############ Variable Neighbourhood Search ###################################################################
+##############################################################################################################
+def vns(cost_function: Callable, kmax: int, max_itr: int, convergence_threshold: float, 
+                 x_initial: Optional[np.array] = None, x_range: Optional[List[List[float]]] = None, hide_progress_bar: Optional[bool] = False) -> Tuple[np.array, float, List[np.array], List[float]]:
+    
+    best_x = []
+    global_best_x = []
+    best_cost = 0
+    global_best_cost = float('inf')
+    x_history = []
+    cost_history = []
+
+    #generate initial solution
+    best_x, best_cost, x_history_iter, cost_history_iter = local_search(cost_function=cost_function, max_itr=max_itr, convergence_threshold=convergence_threshold,
+                                               x_initial=[random.uniform(x_range[i][0], x_range[i][1]) for i in range(len(x_range))], x_range=x_range)
+    x_history += x_history_iter
+    cost_history += cost_history_iter
+
+    if global_best_cost > best_cost:
+        global_best_x = best_x
+        global_best_cost = best_cost
+
+    neighbourhoodPts = []
+    # Select neighbourhoods
+    for i in range(kmax):  
+        neighbourhoodPts.append([random.uniform(x_range[i][0], x_range[i][1]) for i in range(len(x_range))])
+
+    for neighbourhood in neighbourhoodPts:
+        # Do local search
+        best_x, best_cost, x_history_iter, cost_history_iter = local_search(cost_function=cost_function, max_itr=max_itr, convergence_threshold=convergence_threshold,
+                                               x_initial=neighbourhood, x_range=x_range)
+        
+        x_history += x_history_iter
+        cost_history += cost_history_iter
+
+        if global_best_cost > best_cost:
+            global_best_x = best_x
+            global_best_cost = best_cost
+
+            best_x, best_cost, x_history_iter, cost_history_iter = local_search(cost_function=cost_function, max_itr=max_itr, convergence_threshold=convergence_threshold,
+                                                x_initial=best_x, x_range=x_range)
+
+    return global_best_x, global_best_cost, x_history, cost_history
+
+##############################################################################################################
+############ Generalized Neighbourhood Search ################################################################
+##############################################################################################################
+def gns(cost_function: Callable, kmax: int, n_region: int, max_itr: int, convergence_threshold: float, 
+              x_initial: Optional[np.array] = None, x_range: Optional[List[List[float]]] = None, hide_progress_bar: Optional[bool] = False) -> Tuple[np.array, float, List[np.array], List[float]]:
+    
+    region_limits = x_range[i][0]/n_region
+    #run vns with on each region, split by the limits
+
+##############################################################################################################
 ############ Simulated Annealing #############################################################################
 ##############################################################################################################
 def simulated_annealing(cost_function: Callable, max_itr: int, temperature: float, alpha: float, beta: float,
@@ -167,23 +221,6 @@ def simulated_annealing(cost_function: Callable, max_itr: int, temperature: floa
     best_cost_index = np.argmin(cost_history)
     best_x = x_history[best_cost_index]
     best_cost = cost_history[best_cost_index]
-
-    return best_x, best_cost, x_history, cost_history
-
-##############################################################################################################
-############ Variable Neighbour Search (VNS) #################################################################
-##############################################################################################################
-
-def vns(cost_function: Callable, max_itr: int, convergence_threshold: float, 
-                 x_initial: Optional[np.array] = None, x_range: Optional[List[List[float]]] = None, hide_progress_bar: Optional[bool] = False) -> Tuple[np.array, float, List[np.array], List[float]]:
-
-    neighbourhoodPts = []
-
-    # select neighbourhood points
-    #for i in range(5):
-    x_initial = [random.uniform(x_range[i][0], x_range[i][1]) for i in range(len(x_range))]
-
-    print(x_initial)
 
     return best_x, best_cost, x_history, cost_history
 

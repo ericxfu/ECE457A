@@ -13,7 +13,11 @@ iterative_local_search:
   convergence_threshold: 0.001
 
 vns:
-  max_itr: 1000
+  max_itr: 500
+  kmax: 5
+
+gns:
+  n_region: 5
 
 simulated_annealing:
   max_itr: 50

@@ -43,11 +43,14 @@ def main(config: Dict) -> None:
                                                                                               max_itr_ls=config['iterative_local_search']['max_itr_ls'],
                                                                                               convergence_threshold=config['iterative_local_search']['convergence_threshold'],
                                                                                               x_initial=config['x_initial'], x_range=x_range)
-    elif config['search_algorithim'] == 'vns': 
-        best_x, best_cost, x_history, cost_history = search_algorithims.vns(cost_function=cost_function, max_itr=config['local_search']['max_itr'],
+    elif config['search_algorithm'] == 'vns': 
+        best_x, best_cost, x_history, cost_history = search_algorithms.vns(cost_function=cost_function, kmax=config['vns']['kmax'], max_itr=config['local_search']['max_itr'],
                                                                                     convergence_threshold=config['local_search']['convergence_threshold'],
                                                                                     x_initial=config['x_initial'], x_range=x_range)
-
+    elif config['search_algorithm'] == 'gns': 
+        best_x, best_cost, x_history, cost_history = search_algorithms.vns(cost_function=cost_function, kmax=config['vns']['kmax'], n_regions=config['gns']['n_regions'], max_itr=config['local_search']['max_itr'],
+                                                                                    convergence_threshold=config['local_search']['convergence_threshold'],
+                                                                                    x_initial=config['x_initial'], x_range=x_range)
     elif config['search_algorithm'] == 'simulated_annealing':
         best_x, best_cost, x_history, cost_history = search_algorithms.simulated_annealing(cost_function=cost_function, max_itr=config['simulated_annealing']['max_itr'],
                                                                                            temperature=config['simulated_annealing']['temperature'],
